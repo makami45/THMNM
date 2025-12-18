@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./backend  # QUAN TRỌNG: Bắt buộc chui vào folder backend mới chạy lệnh được
+        working-directory: ./demo  # QUAN TRỌNG: Bắt buộc chui vào folder backend mới chạy lệnh được
 
     steps:
     - uses: actions/checkout@v4
