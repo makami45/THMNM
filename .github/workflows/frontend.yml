@@ -1,0 +1,29 @@
+name: Deploy Frontend
+on:
+  push:
+    branches: [ "main" ]       # Chỉ chạy khi push vào nhánh main
+    paths: [ "frontend/**" ]   # QUAN TRỌNG: Chỉ chạy khi sửa file trong folder frontend
+
+jobs:
+  deploy-vercel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Pull Vercel Environment Information
+        working-directory: ./frontend  # Chui vào folder frontend
+        run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project Artifacts
+        working-directory: ./frontend
+        env:
+          # Lấy link backend từ Secret để React biết đường gọi
+          REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+        run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy Project Artifacts to Vercel
+        working-directory: ./frontend
+        run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
