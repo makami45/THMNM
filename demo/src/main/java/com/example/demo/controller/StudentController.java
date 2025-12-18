@@ -5,6 +5,8 @@ import com.example.demo.repoistory.StudentRepository;
 import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,6 +27,7 @@ import com.example.demo.model.*;
 @CrossOrigin(origins = "*")
 public class StudentController {
 	private final StudentRepository repository;
+	private static final Logger log = LoggerFactory.getLogger(StudentController.class);
 
 	public StudentController(StudentRepository repository) {
 		this.repository = repository;
@@ -38,6 +41,7 @@ public class StudentController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Student createStudent(@RequestBody Student student) {
+		log.info("createStudent payload: {}", student);
 		return repository.save(student);
 	}
 
@@ -48,6 +52,7 @@ public class StudentController {
 			return ResponseEntity.notFound().build();
 		}
 		Student s = optional.get();
+		log.info("updateStudent id={} payload={}", id, studentDetails);
 		s.setName(studentDetails.getName());
 		s.setEmail(studentDetails.getEmail());
 		Student updated = repository.save(s);
