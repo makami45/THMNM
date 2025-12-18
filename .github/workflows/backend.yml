@@ -1,0 +1,31 @@
+name: Deploy Backend
+on:
+  push:
+    branches: [ "main" ]       # Chỉ chạy khi push vào nhánh main
+    paths: [ "demo/**" ]    # QUAN TRỌNG: Chỉ chạy khi sửa file trong folder backend
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend  # QUAN TRỌNG: Bắt buộc chui vào folder backend mới chạy lệnh được
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build with Maven
+      # Vì đã có 'defaults.run' ở trên nên không cần working-directory ở đây nữa
+      # Nếu bạn dùng Wrapper thì đổi 'mvn' thành 'chmod +x mvnw && ./mvnw'
+      run: mvn clean package -DskipTests
+
+    - name: Trigger Render Deploy
+      # Lệnh này dùng curl để gọi Render, không cần working-directory
+      run: curl "${{ secrets.RENDER_DEPLOY_HOOK }}"
