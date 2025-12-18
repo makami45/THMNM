@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
 function App() {
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/students')
+    axios.get(`${API_URL}/api/students`)
       .then(res => setStudents(res.data))
       .catch(err => console.log(err));
   }, []);
