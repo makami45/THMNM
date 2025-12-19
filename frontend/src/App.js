@@ -53,7 +53,7 @@ function App() {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1> Nguyen Xuan Long Nhat - DH52201154</h1>
+      <h1> PM_01-Cuoi Ky-Nguyen Xuan Long Nhat</h1>
       <h2>Danh sách sinh viên</h2>
 
       <form onSubmit={handleSubmit} style={{ marginBottom: '20px' }}>
